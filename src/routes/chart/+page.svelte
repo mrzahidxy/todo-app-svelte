@@ -1,83 +1,64 @@
 <script lang="ts">
-	import type { ApexOptions } from 'apexcharts';
-	import { Chart } from '@flowbite-svelte-plugins/chart';
-	import { Card, A, Button, Dropdown, DropdownItem } from 'flowbite-svelte';
+	import { onMount } from 'svelte';
+	import BarChart from '$lib/component/BarChart.svelte';
+	import LineChart from '$lib/component/LineChart.svelte';
+	import Piechart from '$lib/component/Piechart.svelte';
 
-	let options: ApexOptions = {
-		chart: {
-			height: '400px',
-			type: 'area',
-			fontFamily: 'Inter, sans-serif',
-			dropShadow: {
-				enabled: false
-			},
-			toolbar: {
-				show: false
-			}
-		},
-		tooltip: {
-			enabled: true,
-			x: {
-				show: false
-			}
-		},
-		fill: {
-			type: 'gradient',
-			gradient: {
-				opacityFrom: 0.55,
-				opacityTo: 0,
-				shade: '#1C64F2',
-				gradientToColors: ['#1C64F2']
-			}
-		},
-		dataLabels: {
-			enabled: false
-		},
-		stroke: {
-			width: 6
-		},
-		grid: {
-			show: false,
-			strokeDashArray: 4,
-			padding: {
-				left: 2,
-				right: 2,
-				top: 0
-			}
-		},
-		series: [
-			{
-				name: 'New users',
-				data: [6500, 6418, 6456, 6526, 6356, 6456],
-				color: '#1A56DB'
-			}
-		],
-		xaxis: {
-			categories: [
-				'01 February',
-				'02 February',
-				'03 February',
-				'04 February',
-				'05 February',
-				'06 February',
-				'07 February'
-			],
-			labels: {
-				show: false
-			},
-			axisBorder: {
-				show: false
-			},
-			axisTicks: {
-				show: false
-			}
-		},
-		yaxis: {
-			show: false
-		}
+	type Data = {
+		labels: string[];
+		lineData: number[];
+		barData: number[];
+		pieData: number[];
 	};
+
+	let config = $state<Data | null>(null);
+
+	async function loadChart() {
+		const res = await fetch('/api/fake-chart');
+		config = await res.json();
+	}
+
+	onMount(loadChart); // first load
 </script>
 
-<Card class="p-4 md:p-6">
-	<Chart {options} />
-</Card>
+<div class="p-10">
+	<button class="mb-4 rounded bg-blue-600 px-4 py-2 text-white" onclick={loadChart}>
+		🔄 Reload
+	</button>
+
+	{#if config}
+		<div class="flex gap-4">
+			<div class="flex-1">
+				<LineChart
+					title="Line Chart"
+					chartLables={config.labels}
+					chartData={config.lineData}
+					dataLabel="Demo"
+					onReload={loadChart}
+				/>
+			</div>
+
+			<div class="flex-1">
+				<BarChart
+					title="Bar Chart"
+					chartLables={config.labels}
+					chartData={config.barData}
+					dataLabel="Demo"
+					onReload={loadChart}
+				/>
+			</div>
+
+			<div>
+				<Piechart
+					title="Pie Chart"
+					chartLables={config.labels}
+					chartData={config.pieData}
+					dataLabel="Demo"
+					onReload={loadChart}
+				/>
+			</div>
+		</div>
+	{:else}
+		<p>Loading charts…</p>
+	{/if}
+</div>
