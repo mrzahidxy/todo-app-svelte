@@ -24,6 +24,7 @@
 		"flowbite": "^3.1.2",
 		"flowbite-svelte": "^1.10.15",
 		"flowbite-svelte-icons": "^2.2.1",
+		"phosphor-svelte": "^3.0.1",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.11",
@@ -35,6 +36,7 @@
 		"vite-plugin-devtools-json": "^0.2.0"
 	},
 	"dependencies": {
+		"bits-ui": "^2.8.11",
 		"chart.js": "^4.5.0",
 		"simple-datatables": "^10.0.0",
 		"tailwind-merge": "^3.3.1"

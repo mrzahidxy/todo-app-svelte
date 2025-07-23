@@ -2,7 +2,7 @@
 	let { columns, data, footer } = $props<{
 		columns: Array<{ key: string; label: string; sortable?: boolean }>;
 		data: Record<string, any>[];
-		footer: any;
+		footer?: any;
 	}>();
 
 	let sortKey = $state<string>('');
