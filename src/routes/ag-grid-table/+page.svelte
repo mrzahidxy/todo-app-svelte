@@ -8,57 +8,10 @@
 	import Select from '$lib/component/Select.svelte';
 	import TabFilter from '$lib/component/TabFilter.svelte';
 	import type { PageProps } from '../ag-grid-table/$types';
-	import type { ColumnDef } from '$lib/types/ag-grid';
+	import type { ColumnDef } from '$lib/types/agGrid';
+	import { columns, limitOptions, paymentOptions, tabs } from '$lib/table';
 
 	let { data }: PageProps = $props();
-
-	const columns: ColumnDef[] = [
-		{
-			headerName: 'ID',
-			field: 'id',
-			width: 80,
-			cellStyle: { textAlign: 'center' },
-			headerTooltip: 'Sales ID',
-			headerComponentParams: {
-				template: `
-                    <div class="ag-header-cell-label custom-header">
-                        <span class="ag-header-cell-text">純売上</span>
-                        <span class="ml-1 text-[10px] bg-red-200 rounded-full w-4 h-4 flex items-center justify-center flex-shrink-0">?</span>
-                    </div>
-                `
-			}
-		},
-		{ headerName: '商品', field: 'item', width: 150, cellStyle: { fontWeight: 'bold' } },
-		{
-			headerName: '金額',
-			field: 'amount',
-			width: 120,
-			cellStyle: { textAlign: 'right' },
-			cellRenderer: (params) => `¥${params.value.toLocaleString()}`
-		},
-		{ headerName: '日付', field: 'date', width: 120 },
-		{ headerName: 'ステータス', field: 'status', width: 120, cellStyle: { textAlign: 'center' } },
-		{ headerName: '支払い', field: 'payment', width: 120, cellStyle: { textAlign: 'center' } }
-	];
-
-	const tabs = [
-		{ id: 'all', label: 'All' },
-		{ id: 'completed', label: 'Completed' },
-		{ id: 'incomplete', label: 'Incomplete' }
-	];
-
-	const paymentOptions = [
-		{ value: 'all', label: 'All Payments' },
-		{ value: 'paid', label: 'Paid' },
-		{ value: 'unpaid', label: 'Unpaid' }
-	];
-
-	const limitOptions = [
-		{ value: '10', label: '10 per page' },
-		{ value: '20', label: '20 per page' },
-		{ value: '50', label: '50 per page' },
-		{ value: '100', label: '100 per page' }
-	];
 
 	// Local reactive form state
 	let searchQuery = $state(data.query);
@@ -105,8 +58,9 @@
 		goto(`?${params}`, { replaceState: false, noScroll: true, keepFocus: true });
 	}
 
+
 	// Handlers
-	const handleSearch = () => navigateWithParams({ q: searchQuery.trim() });
+	const handleSearch = () => navigateWithParams({ q: searchQuery.trim(), payment: selectedPayment });
 	const handlePaymentChange = () => navigateWithParams({ payment: selectedPayment });
 	const handleLimitChange = () => navigateWithParams({ limit: parseInt(selectedLimit) });
 	const handleTabChange = (tabId: string) => navigateWithParams({ status: tabId });
@@ -114,10 +68,6 @@
 		if (p >= 1 && p <= totalPages && p !== currentPage) navigateWithParams({ page: p });
 	};
 
-	// Enter-key search inside the input
-	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === 'Enter') handleSearch();
-	}
 
 	// Sync local state when URL changes
 	$effect(() => {
@@ -127,15 +77,7 @@
 		isNavigating = false;
 	});
 
-	// Pagination text helper
-	const paginationInfo = $derived.by(() => {
-		const start = (currentPage - 1) * data.limit + 1;
-		const end = Math.min(currentPage * data.limit, totalItems);
-		return `${start}-${end} of ${totalItems}`;
-	});
 </script>
-
-<svelte:window onkeydown={handleKeydown} />
 
 <div class="min-h-screen bg-gray-50 p-6">
 	<div class="mx-auto max-w-7xl space-y-6">
@@ -168,7 +110,6 @@
 						bind:value={selectedPayment}
 						options={paymentOptions}
 						disabled={isNavigating}
-						onchange={handlePaymentChange}
 					/>
 				</div>
 
@@ -212,8 +153,9 @@
 						<div class="flex items-center space-x-3">
 							<div
 								class="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"
-							/>
+							>
 							<span class="text-sm text-gray-600">Loading...</span>
+							</div>
 						</div>
 					</div>
 				{:else}

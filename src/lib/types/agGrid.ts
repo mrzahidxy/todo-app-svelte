@@ -12,3 +12,4 @@ export interface ColumnDef {
     cellRenderer?: (params: any) => string;
     headerTooltip?: string;
 }
+
