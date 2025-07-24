@@ -119,13 +119,4 @@
 		white-space: nowrap;
 	}
 
-	/* Tooltip styles */
-	.tooltip {
-		opacity: 0;
-		transition: opacity 0.3s;
-	}
-
-	.question-mark:hover + .tooltip {
-		opacity: 1;
-	}
 </style>

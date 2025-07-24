@@ -36,6 +36,7 @@
 		"vite-plugin-devtools-json": "^0.2.0"
 	},
 	"dependencies": {
+		"ag-grid-community": "^34.0.2",
 		"bits-ui": "^2.8.11",
 		"chart.js": "^4.5.0",
 		"simple-datatables": "^10.0.0",
