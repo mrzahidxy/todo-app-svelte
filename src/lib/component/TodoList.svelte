@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Ttodo } from '$lib/types/todo';
 	import Card from './Card.svelte';
 	import TodoItem from './TodoItem.svelte';
 

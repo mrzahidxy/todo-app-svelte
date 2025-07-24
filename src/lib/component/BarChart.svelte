@@ -11,7 +11,14 @@
 		if (canvas) {
 			chart = new Chart(canvas, {
 				type: 'bar',
-				data: []
+				data: {
+					labels: [],
+					datasets: [{
+						label: '',
+						data: [],
+						backgroundColor: 'rgba(75,192,192,0.4)'
+					}]
+				}
 			});
 		}
 	});

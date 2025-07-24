@@ -31,8 +31,8 @@
 			<div class="flex-1">
 				<LineChart
 					title="Line Chart"
-					chartLables={config.labels}
-					chartData={config.lineData}
+					chartLables={[...config.labels]}
+					chartData={[...config.lineData]}
 					dataLabel="Demo"
 					onReload={loadChart}
 				/>

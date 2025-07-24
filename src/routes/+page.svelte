@@ -1,7 +1,7 @@
 <script lang="ts">
 	import TodoList from '$lib/component/TodoList.svelte';
 	import { alert } from '$lib/stores/store';
-	import type { Ttodo } from '$lib/types/todo';
+
 
 	let todos = $state<Ttodo[]>([
 		{ id: 1, title: 'Todo 1', completed: false },
